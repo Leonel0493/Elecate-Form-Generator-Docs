@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Infrastructure &#8212; Elecate Form Generator 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="infrastructure">
+<h1>Infrastructure<a class="headerlink" href="#infrastructure" title="Link to this heading">¶</a></h1>
+<p>This layer provides technical implementations of interfaces defined in the Domain and Application layers. It handles data persistence, external service integration, configuration, and context resolution.</p>
+<section id="data-persistence">
+<h2>Data Persistence<a class="headerlink" href="#data-persistence" title="Link to this heading">¶</a></h2>
+<p>The project uses two database systems:</p>
+<ul class="simple">
+<li><p><strong>PostgreSQL</strong> for handling shared configuration data like secrets.</p></li>
+<li><p><strong>SQL Server</strong> for domain-specific business data such as prospects and forms.</p></li>
+</ul>
+<p><strong>PostgreSQL</strong></p>
+<p>Path: <cite>Persistence/Postgres/</cite></p>
+<ul class="simple">
+<li><p><cite>PgDbContext.cs</cite>: Main EF Core DbContext for PostgreSQL.</p></li>
+<li><p><cite>SecretConfiguration.cs</cite>: Entity configuration for the <cite>Secret</cite> model.</p></li>
+</ul>
+<p><strong>SQL Server</strong></p>
+<p>Path: <cite>Persistence/SqlServer/</cite></p>
+<ul class="simple">
+<li><p><cite>SqlServerDbContext.cs</cite>: Main EF Core DbContext for SQL Server.</p></li>
+<li><p>Configurations:
+- <cite>FieldConfiguration.cs</cite>
+- <cite>InputFieldConfiguration.cs</cite>
+- <cite>InputTypeConfiguration.cs</cite>
+- <cite>ProspectConfiguration.cs</cite></p></li>
+</ul>
+</section>
+<section id="repositories">
+<h2>Repositories<a class="headerlink" href="#repositories" title="Link to this heading">¶</a></h2>
+<p>These classes implement the repository interfaces defined in the Domain layer.</p>
+<p><strong>FormGenerator</strong></p>
+<ul class="simple">
+<li><p><cite>FormGeneratorRepository.cs</cite></p></li>
+<li><p><cite>InputFieldRepository.cs</cite></p></li>
+<li><p><cite>OptionSourceRepository.cs</cite></p></li>
+</ul>
+<p><strong>Prospects</strong></p>
+<ul class="simple">
+<li><p><cite>ProspectRepository.cs</cite></p></li>
+</ul>
+<p><strong>ScriptGenerator</strong></p>
+<ul class="simple">
+<li><p><cite>ScriptGenerator.cs</cite></p></li>
+</ul>
+<p><strong>Shared</strong></p>
+<ul class="simple">
+<li><p><cite>RestClienteRepository.cs</cite></p></li>
+</ul>
+</section>
+<section id="multi-tenant-context-resolution">
+<h2>Multi-Tenant Context Resolution<a class="headerlink" href="#multi-tenant-context-resolution" title="Link to this heading">¶</a></h2>
+<p>To support multi-tenancy, the system dynamically resolves the correct database context based on tenant identity.</p>
+<p>Path: <cite>Shared/Repositories/</cite></p>
+<ul class="simple">
+<li><p><cite>IDynamicDbContextProvider.cs</cite>: Interface for database context resolution.</p></li>
+<li><p><cite>DynamicDbContextProvider.cs</cite>: Concrete implementation.</p></li>
+<li><p><cite>SqlServerContextGenerator.cs</cite>: Generates DbContext SQL Server contexts.</p></li>
+<li><p><cite>DbCacheSingleton.cs</cite>: Caches mappings between tenant identifiers and database names.</p></li>
+</ul>
+</section>
+<section id="external-integrations">
+<h2>External Integrations<a class="headerlink" href="#external-integrations" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><cite>RestClienteRepository.cs</cite>: Provides access to external client services via REST.</p></li>
+</ul>
+</section>
+<section id="responsibilities-summary">
+<h2>Responsibilities Summary<a class="headerlink" href="#responsibilities-summary" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Implements domain and application interfaces.</p></li>
+<li><p>Separates concerns by database type and context.</p></li>
+<li><p>Abstracts DB configuration using EF Core Fluent API.</p></li>
+<li><p>Supports multi-tenant data access strategies.</p></li>
+<li><p>Integrates with external services as needed.</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Elecate Form Generator</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Architecture.html">Architecture</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Andreas Ellerbrock | Leonel Rivas.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/infrastructure/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
